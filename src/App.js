@@ -72,7 +72,6 @@ class App extends Component {
         >
           <React.Fragment>
             <NotificationContainer />
-            {isMultiColorActive && <ColorSwitcher />}
             <Suspense fallback={<div className="loading" />}>
               <Router>
                 <Switch>

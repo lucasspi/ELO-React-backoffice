@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { Row, Card, CardTitle, Label, FormGroup, Button } from "reactstrap";
+import {
+  Row,
+  Card,
+  CardTitle,
+  Label,
+  FormGroup,
+  Button,
+  Input,
+} from "reactstrap";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -9,12 +17,14 @@ import { Formik, Form, Field } from "formik";
 import { loginUser } from "../../redux/actions";
 import { Colxx } from "../../components/common/CustomBootstrap";
 import IntlMessages from "../../helpers/IntlMessages";
+import users from "../../constants/users";
+
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "demo@gogo.com",
-      password: "gogo123"
+      password: "gogo123",
     };
   }
 
@@ -24,7 +34,7 @@ class Login extends Component {
         this.props.loginUser(values, this.props.history);
       }
     }
-  }
+  };
 
   validateEmail = (value) => {
     let error;
@@ -34,7 +44,7 @@ class Login extends Component {
       error = "Invalid email address";
     }
     return error;
-  }
+  };
 
   validatePassword = (value) => {
     let error;
@@ -44,7 +54,7 @@ class Login extends Component {
       error = "Value must be longer than 3 characters";
     }
     return error;
-  }
+  };
 
   componentDidUpdate() {
     if (this.props.error) {
@@ -54,53 +64,47 @@ class Login extends Component {
         3000,
         null,
         null,
-        ''
+        ""
       );
     }
   }
 
   render() {
     const { password, email } = this.state;
-    const initialValues = {email,password};
+    const initialValues = { email, password };
 
     return (
       <Row className="h-100">
         <Colxx xxs="12" md="10" className="mx-auto my-auto">
           <Card className="auth-card">
             <div className="position-relative image-side ">
-              <p className="text-white h2">MAGIC IS IN THE DETAILS</p>
+              <p className="text-white h2">PORTAL ELO</p>
               <p className="white mb-0">
-                Please use your credentials to login.
+                Selecione o seu usuário e depois informe sua senha
                 <br />
-                If you are not a member, please{" "}
-                <NavLink to={`/register`} className="white">
-                  register
-                </NavLink>
-                .
+                Se você não é um membro, contate o time de Infraestrutura.
               </p>
             </div>
             <div className="form-side">
               <NavLink to={`/`} className="white">
-                <span className="logo-single" />
+                <img className="logo-single-img" src="/assets/logo-black.png" />
               </NavLink>
               <CardTitle className="mb-4">
                 <IntlMessages id="user.login-title" />
               </CardTitle>
 
-              <Formik
-                initialValues={initialValues}
-                onSubmit={this.onUserLogin}>
+              <Formik initialValues={initialValues} onSubmit={this.onUserLogin}>
                 {({ errors, touched }) => (
                   <Form className="av-tooltip tooltip-label-bottom">
                     <FormGroup className="form-group has-float-label">
                       <Label>
-                        <IntlMessages id="user.email" />
+                        <IntlMessages id="user.username" />
                       </Label>
-                      <Field
-                        className="form-control"
-                        name="email"
-                        validate={this.validateEmail}
-                      />
+                      <Input type="select">
+                        {users.map((item, index) => (
+                          <option key={index}>{item.name}</option>
+                        ))}
+                      </Input>
                       {errors.email && touched.email && (
                         <div className="invalid-feedback d-block">
                           {errors.email}
@@ -123,13 +127,12 @@ class Login extends Component {
                         </div>
                       )}
                     </FormGroup>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <NavLink to={`/user/forgot-password`}>
-                        <IntlMessages id="user.forgot-password-question" />
-                      </NavLink>
+                    <div className="d-flex justify-content-end align-items-center">
                       <Button
                         color="primary"
-                        className={`btn-shadow btn-multiple-state ${this.props.loading ? "show-spinner" : ""}`}
+                        className={`btn-shadow btn-multiple-state ${
+                          this.props.loading ? "show-spinner" : ""
+                        }`}
                         size="lg"
                       >
                         <span className="spinner d-inline-block">
@@ -137,11 +140,11 @@ class Login extends Component {
                           <span className="bounce2" />
                           <span className="bounce3" />
                         </span>
-                        <span className="label"><IntlMessages id="user.login-button" /></span>
+                        <span className="label">
+                          <IntlMessages id="user.login-button" />
+                        </span>
                       </Button>
                     </div>
-
-
                   </Form>
                 )}
               </Formik>
@@ -157,9 +160,6 @@ const mapStateToProps = ({ authUser }) => {
   return { user, loading, error };
 };
 
-export default connect(
-  mapStateToProps,
-  {
-    loginUser
-  }
-)(Login);
+export default connect(mapStateToProps, {
+  loginUser,
+})(Login);

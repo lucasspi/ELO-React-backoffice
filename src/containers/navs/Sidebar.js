@@ -356,7 +356,7 @@ class Sidebar extends Component {
                             target="_blank"
                           >
                             <i className={item.icon} />{' '}
-                            <IntlMessages id={item.label} />
+                            <span>{item.label}</span>
                           </a>
                         ) : (
                           <NavLink
@@ -365,7 +365,7 @@ class Sidebar extends Component {
                             data-flag={item.id}
                           >
                             <i className={item.icon} />{' '}
-                            <IntlMessages id={item.label} />
+                            <span>{item.label}</span>
                           </NavLink>
                         )}
                       </NavItem>
